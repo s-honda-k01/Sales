@@ -1,0 +1,10 @@
+src/test/java/com.pci配下のApplicationTest#contextLoads()を実行することで、ユーザ作成を行う。
+(JUnitテスト)
+
+DBへのinsertでは作成しない。
+
+手順>>
+1.Sales_adv.ddl実行
+2.MT系insert.sql実行
+3.JUnit実行(上記)
+4.TR系insert.sql実行
