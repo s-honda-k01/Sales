@@ -30,7 +30,6 @@ import com.pci.repository.CustomerRepository;
 import com.pci.repository.ItemRepository;
 import com.pci.repository.SalesDetailRepository;
 import com.pci.repository.SalesOutlineRepository;
-import com.pci.repository.SalesSummaryRepository;
 import com.pci.repository.UserRepository;
 
 @Controller
@@ -49,9 +48,6 @@ public class SaleController {
 	CustomerRepository customerRepository;
 	@Autowired
 	SalesDetailRepository saleDetailRepository;
-	
-	@Autowired
-	SalesSummaryRepository salesSummaryRepository;
 	
 	List<TrSalesDetail> salesDetails = new ArrayList<TrSalesDetail>();
 	List<TrSalesDetail> removeDetailList = new ArrayList<TrSalesDetail>();
@@ -94,6 +90,28 @@ public class SaleController {
 				break;
 			}
 		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/salesSummaryByDate",method=RequestMethod.POST)
+	public ModelAndView salesSummaryByDate(ModelAndView mav) {
+		user=userRepository.findByUserCode(userDetail.getUsername()).get();
+		mav.addObject("userName", user.getUserName());
+		Collection<? extends GrantedAuthority> auths = userDetail.getAuthorities();
+		for(GrantedAuthority ga:auths) {
+			if(ga.getAuthority().equals("ROLE_MANAGER")) {
+				grantedAuthority=ga;
+				mav.addObject("salesList", salesSummaryResultConverterForDate(saleDetailRepository.findBySalesSummaryByDate()));
+				mav.setViewName("/200manager/216salesSummaryByDate");
+				break;
+			}else{
+				grantedAuthority=ga;
+				mav.addObject("salesList", salesSummaryResultConverterForDate(saleDetailRepository.findBySalesSummaryByDate(user.getUserCode())));
+				mav.setViewName("/300staff/312salesSummaryByDate");
+				break;
+			}
+		}
+		
 		return mav;
 	}
 	
@@ -147,15 +165,6 @@ public class SaleController {
 		mav.addObject("userName", user.getUserName());
 		mav.addObject("salesList", salesSummaryResultConverter(saleDetailRepository.findBySalesSummaryByStaff()));
 		mav.setViewName("/200manager/215salesSummaryByStaff");
-		return mav;
-	}
-
-	@RequestMapping(value = "/salesSummaryByDate",method=RequestMethod.POST)
-	public ModelAndView salesSummaryByDate(ModelAndView mav) {
-		user=userRepository.findByUserCode(userDetail.getUsername()).get();
-		mav.addObject("userName", user.getUserName());
-		mav.addObject("salesList", salesSummaryResultConverterForDate(saleDetailRepository.findBySalesSummaryByDate()));
-		mav.setViewName("/200manager/216salesSummaryByDate");
 		return mav;
 	}
 	

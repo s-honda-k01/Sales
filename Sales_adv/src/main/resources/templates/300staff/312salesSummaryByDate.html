@@ -11,26 +11,18 @@
 <div layout:fragment="commons/menu">メニュー</div>
 <div layout:fragment="contents" id="content">
 <div class="box">
-<h3>売上一覧</h3>
+<h3>日付別売上金額集計</h3>
  	<p th:text="${msg}"></p>
- 	<form role="form" id="saleCre" th:action="@{/saleCre}" th:object="${formModel}" method="post">
- 		<button type="submit" class="menuBtn">売上新規登録</button>
- 	</form>
- 	<form th:action="@{/salesSummaryByDate}" method="post">
- 			<button type="submit">日付別売上</button>
- 	</form>
  	 	<table>
  		<tr class="hd2">
  			<th>No.</th>
- 			<th>売上日</th>
- 			<th>顧客</th>
- 			<th>売上明細</th>
+ 			<th>日付</th>
+ 			<th>売上合計額</th>
  		</tr>
  		<tr th:each="sale,cnt:${salesList}" class="row">
  			<td th:text="${cnt.count}" class="c0"/>
-  			<td th:text="${sale.saleDate}" class="c3"/>
-  			<td th:text="${sale.mtCustomer.customerName}" class="c3"/>
-  			<td><form th:action="@{'/salesDetailDisp/'+${sale.salesId}}" method="get"><button type="submit" id="upd" class="">確認</button></form></td>
+ 			<td th:text="${sale.date}" class="c4"/>
+  			<td th:text="${sale.total}" class="c3"/>
  		</tr>
  	</table>
 </div>
