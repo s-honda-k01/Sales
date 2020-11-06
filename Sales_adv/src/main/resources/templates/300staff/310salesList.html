@@ -16,8 +16,14 @@
  	<form role="form" id="saleCre" th:action="@{/saleCre}" th:object="${formModel}" method="post">
  		<button type="submit" class="menuBtn">売上新規登録</button>
  	</form>
+ 	<form th:action="@{/salesSummaryByItem}" method="post">
+ 		<button type="submit">商品別売上</button>
+ 	</form>
+ 	<form th:action="@{/salesSummaryByCustomer}" method="post">
+ 		<button type="submit">顧客別売上</button>
+ 	</form>
  	<form th:action="@{/salesSummaryByDate}" method="post">
- 			<button type="submit">日付別売上</button>
+ 		<button type="submit">日付別売上</button>
  	</form>
  	 	<table>
  		<tr class="hd2">

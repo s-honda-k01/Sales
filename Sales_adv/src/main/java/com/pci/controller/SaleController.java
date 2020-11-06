@@ -107,11 +107,53 @@ public class SaleController {
 			}else{
 				grantedAuthority=ga;
 				mav.addObject("salesList", salesSummaryResultConverterForDate(saleDetailRepository.findBySalesSummaryByDate(user.getUserCode())));
-				mav.setViewName("/300staff/312salesSummaryByDate");
+				mav.setViewName("/300staff/316salesSummaryByDate");
 				break;
 			}
 		}
 		
+		return mav;
+	}
+
+	@RequestMapping(value = "/salesSummaryByItem",method=RequestMethod.POST)
+	public ModelAndView salesSummaryByItem(ModelAndView mav) {
+		user=userRepository.findByUserCode(userDetail.getUsername()).get();
+		mav.addObject("userName", user.getUserName());
+		Collection<? extends GrantedAuthority> auths = userDetail.getAuthorities();
+		for(GrantedAuthority ga:auths) {
+			if(ga.getAuthority().equals("ROLE_MANAGER")) {
+				grantedAuthority=ga;
+				mav.addObject("salesList", salesSummaryResultConverter(saleDetailRepository.findBySalesSummaryByItem()));
+				mav.setViewName("/200manager/212salesSummaryByItem");
+				break;
+			}else{
+				grantedAuthority=ga;
+				mav.addObject("salesList", salesSummaryResultConverter(saleDetailRepository.findBySalesSummaryByItem(user.getUserCode())));
+				mav.setViewName("/300staff/312salesSummaryByItem");
+				break;
+			}
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/salesSummaryByCustomer",method=RequestMethod.POST)
+	public ModelAndView salesSummaryByCustomer(ModelAndView mav) {
+		user=userRepository.findByUserCode(userDetail.getUsername()).get();
+		mav.addObject("userName", user.getUserName());
+		Collection<? extends GrantedAuthority> auths = userDetail.getAuthorities();
+		for(GrantedAuthority ga:auths) {
+			if(ga.getAuthority().equals("ROLE_MANAGER")) {
+				grantedAuthority=ga;
+				mav.addObject("salesList", salesSummaryResultConverter(saleDetailRepository.findBySalesSummaryByCustomer()));
+				mav.setViewName("/200manager/213salesSummaryByCustomer");
+				break;
+			}else{
+				grantedAuthority=ga;
+				mav.addObject("salesList", salesSummaryResultConverter(saleDetailRepository.findBySalesSummaryByCustomer(user.getUserCode())));
+				mav.setViewName("/300staff/313salesSummaryByCustomer");
+				break;
+			}
+		}
 		return mav;
 	}
 	
@@ -132,23 +174,9 @@ public class SaleController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/salesSummaryByItem",method=RequestMethod.POST)
-	public ModelAndView salesSummaryByItem(ModelAndView mav) {
-		user=userRepository.findByUserCode(userDetail.getUsername()).get();
-		mav.addObject("userName", user.getUserName());
-		mav.addObject("salesList", salesSummaryResultConverter(saleDetailRepository.findBySalesSummaryByItem()));
-		mav.setViewName("/200manager/212salesSummaryByItem");
-		return mav;
-	}
 
-	@RequestMapping(value = "/salesSummaryByCustomer",method=RequestMethod.POST)
-	public ModelAndView salesSummaryByCustomer(ModelAndView mav) {
-		user=userRepository.findByUserCode(userDetail.getUsername()).get();
-		mav.addObject("userName", user.getUserName());
-		mav.addObject("salesList", salesSummaryResultConverter(saleDetailRepository.findBySalesSummaryByCustomer()));
-		mav.setViewName("/200manager/213salesSummaryByCustomer");
-		return mav;
-	}
+
+
 
 	@RequestMapping(value = "/salesSummaryByItemGenre",method=RequestMethod.POST)
 	public ModelAndView salesSummaryByItemGenre(ModelAndView mav) {

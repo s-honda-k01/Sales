@@ -52,4 +52,19 @@ public interface SalesDetailRepository extends JpaRepository<TrSalesDetail, Long
 			+ "GROUP BY d.trSalesOutline.saleDate "
 			+ "ORDER BY d.trSalesOutline.saleDate DESC")
 	public List<Object[]> findBySalesSummaryByDate(@Param("userCode") String userCode);
+	
+	@Query("SELECT d.mtItem.itemCode as code, d.mtItem.itemName as name, sum(d.quantity*d.salesPrice) as total "
+			+ "FROM TrSalesDetail d "
+			+ "WHERE d.trSalesOutline.mtUser.userCode = :userCode "
+			+ "GROUP BY d.mtItem.itemCode, d.mtItem.itemName "
+			+ "ORDER BY d.mtItem.itemCode")
+	public List<Object[]> findBySalesSummaryByItem(@Param("userCode") String userCode);
+	
+	@Query("SELECT d.trSalesOutline.mtCustomer.customerCode as code, d.trSalesOutline.mtCustomer.customerName as name, sum(d.quantity*d.salesPrice) as total "
+			+ "FROM TrSalesDetail d "
+			+ "WHERE d.trSalesOutline.mtUser.userCode = :userCode "
+			+ "GROUP BY d.trSalesOutline.mtCustomer.customerCode, d.trSalesOutline.mtCustomer.customerName "
+			+ "ORDER BY d.trSalesOutline.mtCustomer.customerCode")
+	public List<Object[]> findBySalesSummaryByCustomer(@Param("userCode") String userCode);
 }
+
